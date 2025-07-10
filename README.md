@@ -240,4 +240,37 @@
   </script>
 </body>
 </html>
+<!-- 기존 코드 생략 -->
+<script>
+  // ... (기존 코드 유지)
+
+  let dropCounter = 0;
+  let dropInterval = 1000;
+  let lastTime = 0;
+  let speedIncreaseInterval = 10000; // 10초마다 속도 증가
+  let lastSpeedIncrease = 0;
+
+  function update(time = 0) {
+    const deltaTime = time - lastTime;
+    lastTime = time;
+
+    dropCounter += deltaTime;
+
+    // 일정 시간마다 속도 증가
+    if (time - lastSpeedIncrease > speedIncreaseInterval) {
+      dropInterval = Math.max(200, dropInterval - 100); // 최소 속도 제한
+      lastSpeedIncrease = time;
+      console.log("속도 증가! 현재 간격: " + dropInterval + "ms");
+    }
+
+    if (dropCounter > dropInterval) {
+      playerDrop();
+    }
+
+    draw();
+    requestAnimationFrame(update);
+  }
+
+  // ... (나머지 기존 코드 유지)
+</script>
 

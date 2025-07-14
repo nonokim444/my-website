@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>테트리스 게임</title>
+  <title>테트리스</title>
   <style>
     body {
       background: #000;
@@ -15,12 +15,10 @@
       height: 100vh;
       margin: 0;
     }
-
     #scoreDisplay {
       font-size: 24px;
       margin-bottom: 10px;
     }
-
     canvas {
       border: 2px solid #fff;
       background: #111;
@@ -34,7 +32,7 @@
   <script>
     const canvas = document.getElementById('tetris');
     const context = canvas.getContext('2d');
-    context.scale(20, 20);
+    context.scale(20, 20); // 1칸 = 20px
 
     let score = 0;
     let dropInterval = 1000;
@@ -45,13 +43,13 @@
 
     const colors = [
       null,
-      '#FF0D72',  // T
-      '#0DC2FF',  // O
-      '#0DFF72',  // L
-      '#F538FF',  // J
-      '#FF8E0D',  // I
-      '#FFE138',  // S
-      '#3877FF',  // Z
+      '#FF0D72', // T
+      '#0DC2FF', // O
+      '#0DFF72', // L
+      '#F538FF', // J
+      '#FF8E0D', // I
+      '#FFE138', // S
+      '#3877FF', // Z
     ];
 
     const arena = createMatrix(12, 20);
@@ -136,7 +134,6 @@
           if (value !== 0) {
             context.fillStyle = colors[value];
             context.fillRect(x + offset.x, y + offset.y, 1, 1);
-            // 블록 테두리
             context.strokeStyle = '#000';
             context.lineWidth = 0.05;
             context.strokeRect(x + offset.x, y + offset.y, 1, 1);
@@ -145,9 +142,30 @@
       });
     }
 
+    function drawGrid() {
+      context.strokeStyle = '#333'; // 그리드 선 색
+      context.lineWidth = 0.05;
+
+      for (let x = 0; x < arena[0].length; x++) {
+        context.beginPath();
+        context.moveTo(x, 0);
+        context.lineTo(x, arena.length);
+        context.stroke();
+      }
+
+      for (let y = 0; y < arena.length; y++) {
+        context.beginPath();
+        context.moveTo(0, y);
+        context.lineTo(arena[0].length, y);
+        context.stroke();
+      }
+    }
+
     function draw() {
       context.fillStyle = '#000';
       context.fillRect(0, 0, canvas.width, canvas.height);
+
+      drawGrid(); // 배경 그리드 먼저 그리기
       drawMatrix(arena, { x: 0, y: 0 });
       drawMatrix(player.matrix, player.pos);
     }
@@ -261,17 +279,11 @@
     }
 
     document.addEventListener('keydown', event => {
-      if (event.key === 'ArrowLeft') {
-        playerMove(-1);
-      } else if (event.key === 'ArrowRight') {
-        playerMove(1);
-      } else if (event.key === 'ArrowDown') {
-        playerDrop();
-      } else if (event.key === 'q') {
-        playerRotate(-1);
-      } else if (event.key === 'w') {
-        playerRotate(1);
-      }
+      if (event.key === 'ArrowLeft') playerMove(-1);
+      else if (event.key === 'ArrowRight') playerMove(1);
+      else if (event.key === 'ArrowDown') playerDrop();
+      else if (event.key === 'q') playerRotate(-1);
+      else if (event.key === 'ArrowUp') playerRotate(1);
     });
 
     playerReset();
